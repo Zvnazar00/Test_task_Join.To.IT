@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+    Event Detail
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-center mt-4">
+        <div class="card" style="width: 50%;">
+            <div class="card-body">
+                <h1 class="card-title text-center">{{ event.title }}</h1>
+                <p class="card-text">{{ event.description }}</p>
+                <p class="card-text"><strong>Date:</strong> {{ event.date }}</p>
+                <p class="card-text"><strong>Time:</strong> {{ event.time|date:"g:i A" }}</p>
+                <p class="card-text"><strong>Location:</strong> {{ event.location }}</p>
+
+                {% if user.is_authenticated and user.is_staff %}
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'event_update' event.id %}" class="btn btn-warning">Edit Event</a>
+                    <form method="post" action="{% url 'event_delete' event.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete Event</button>
+                    </form>
+                </div>
+                {% endif %}
+
+                <a href="{% url 'event_register' event.id %}" class="btn btn-primary mt-3 d-block text-center">Register for this event</a>
+                <a href="{% url 'event_list' %}" class="btn btn-secondary mt-3 d-block text-center">Back to Event List</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

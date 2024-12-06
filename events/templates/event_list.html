@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+    Event List
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-center mt-5">
+        <div class="card" style="width: 70%;">
+            <div class="card-body">
+                <h1 class="mb-4">Events</h1>
+
+                <form method="get" class="mb-4">
+                    <input type="hidden" name="apply_filters" value="true">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="text" name="search" class="form-control" placeholder="Search events..." value="{{ request.GET.search }}">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="location" class="form-control" placeholder="Filter by location..." value="{{ request.GET.location }}">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" name="date" class="form-control" placeholder="Filter by date..." value="{{ request.GET.date }}">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="time" name="time" class="form-control" placeholder="Filter by time..." value="{{ request.GET.time }}">
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                        </div>
+                    </div>
+                </form>
+
+                 {% if user.is_staff %}
+                    <a href="{% url 'event_create' %}" class="btn btn-primary mb-4">Create New Event</a>
+                {% endif %}
+                <ul class="list-group">
+                    {% for event in events %}
+                        <li class="list-group-item">
+                            <a href="{% url 'event_detail' event.pk %}" class="fw-bold" style="font-size: 24px; color: #333333;">{{ event.title }}</a>
+                            <p class="mb-1" style="font-size: 18px;"><strong>Organizer:</strong>  {{ event.organizer }}</p>
+                            <p class="mb-1" style="font-size: 16px;"><strong>Description:</strong>  {{ event.description }}</p>
+                            <p class="mb-1" style="font-size: 16px;"><strong>Date:</strong> {{ event.date }}</p>
+                            <p class="mb-1" style="font-size: 16px;"><strong>Time:</strong> {{ event.time|date:"g:i A" }}</p>
+                            <p class="mb-0" style="font-size: 16px;"><strong>Location:</strong>  {{ event.location }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
